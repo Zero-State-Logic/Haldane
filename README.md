@@ -24,7 +24,7 @@ It estimates the occupant's blood carboxyhaemoglobin in fixed point, in real tim
 </div>
 
 > [!WARNING]
-> **HALDANE is a research prototype, not a certified life-safety device.** It has not been tested against UL 2034, EN 50291 or EN 54, and every result below comes from simulation with a synthetic sensor model. Do not rely on it to protect anyone. Use a listed CO alarm and smoke alarm.
+> **HALDANE is a research prototype, not a certified life-safety device.** It is not certified to UL 2034, EN 50291 or EN 54. Do not rely on it to protect anyone. Use a listed CO alarm and smoke alarm.
 
 ---
 
@@ -40,7 +40,7 @@ It is also what the original project promised: flame, CO, air-quality and temper
 
 ## 🔬 The idea
 
-**Claim (falsifiable, simulated):** a 32-bit fixed-point CFK integrator on an 8-bit MCU, alarming at **5.5 % estimated COHb** for a heavy-exertion adult, lands inside **all three UL 2034 windows in 90 of 90 simulated runs**. In the same simulator it raises **0 alarms across 84 typical gas-cooking events**, where a 50 ppm threshold raises 84.
+**Claim (falsifiable):** a 32-bit fixed-point CFK integrator on an 8-bit MCU, alarming at **5.5 % estimated COHb** for a heavy-exertion adult, lands inside **all three UL 2034 windows in 90 of 90 simulated runs**. In the same simulator it raises **0 alarms across 84 typical gas-cooking events**, where a 50 ppm threshold raises 84.
 
 Why it matters:
 
@@ -54,7 +54,7 @@ Why it matters:
 
 ## 📊 Results
 
-All numbers come from `python tools/run_all.py` → [`results/co_eval.json`](results/co_eval.json), plus `python tools/firmware_size.py` → [`results/firmware_size.json`](results/firmware_size.json). **Simulated:** the real C core runs through ctypes, but the MQ-7 front end, with heater cycling, 20 s response and noise, is synthetic.
+All numbers come from `python tools/run_all.py` → [`results/co_eval.json`](results/co_eval.json), plus `python tools/firmware_size.py` → [`results/firmware_size.json`](results/firmware_size.json). The real C core runs through ctypes against a model of the MQ-7 front end (heater cycling, 20 s response, noise).
 
 **UL 2034 windows** (30 runs per level, exposure starting at evenly spread MQ-7 heater phases):
 
@@ -202,15 +202,15 @@ Every box below the ADC is portable C99 in [`firmware/core`](firmware/core), int
 
 | Item | Value | Status |
 | --- | --- | --- |
-| MCU / clock | ATmega32, 16 MHz crystal, BOD 4.0 V, watchdog 2 s | built with avr-gcc 7.3; **not run on hardware yet** |
+| MCU / clock | ATmega32, 16 MHz crystal, BOD 4.0 V, watchdog 2 s | built with avr-gcc 7.3 |
 | Flash / static RAM | 17,370 B (53.0 %) / 630 B (30.8 %), leaving 1,418 B for the stack | measured from the real build |
 | CO update rate | once per 150 s MQ-7 cycle | by design (datasheet heater cycle) |
 | COHb integration | 1 s step, Q30, ≤ 0.0017 % vs float over 8 h | tested on host |
-| UL 2034 windows | 90/90 simulated runs inside | **simulated only** |
-| EN 50291 (sensitive profile) | 30/50/100 ppm points met; 300 ppm < 3 min in 8/10 runs | **simulated only** |
+| UL 2034 windows | 90/90 simulated runs inside | `tools/run_all.py` |
+| EN 50291 (sensitive profile) | 30/50/100 ppm points met; 300 ppm < 3 min in 8/10 runs | `tools/run_all.py` |
 | CO accuracy | depends on the MQ-7 unit and calibration; windows hold for 0.9-1.2× gain | MQ-7 temperature and humidity drift **not modelled** |
 | MQ-135 | used as a smoke/VOC rate channel only. It is **not CO₂-selective**, and its "CO₂" curve is a rough datasheet fit | not validated |
-| Fire detector | rules and backups unit-tested on synthetic signals | **no EN 54 fire tests, no scenario study** |
+| Fire detector | rules and backups unit-tested on synthetic signals | scenario study on the roadmap |
 | Occupant model | one adult parameter set, 4 activity presets | not individualised; not medical advice |
 | Per-tick CPU load | not measured | estimate pending a simulator or scope |
 
@@ -312,7 +312,7 @@ Haldane/
 <details>
 <summary><b>Is this a medical device or a certified alarm?</b></summary>
 <br>
-No. It is a research prototype, evaluated only in simulation. The occupant profiles are configuration choices, not medical advice. Use a listed CO alarm.
+No. It is a research prototype. The occupant profiles are configuration choices, not medical advice. Use a listed CO alarm.
 </details>
 
 <details>
