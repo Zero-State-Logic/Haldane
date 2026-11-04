@@ -1,0 +1,16 @@
+{
+  "toolchain": "avr-gcc 7.3.0 (PlatformIO toolchain-atmelavr), -Os, LTO",
+  "mcu": "ATmega32 @ 16 MHz",
+  "sections": {
+    "text": 17308,
+    "data": 62,
+    "bss": 568,
+    "eeprom": 12
+  },
+  "flash_bytes": 17370,
+  "flash_pct": 53.0,
+  "static_ram_bytes": 630,
+  "static_ram_pct": 30.8,
+  "ram_left_for_stack_bytes": 1418,
+  "note": "static RAM = .data + .bss; the stack is not included"
+}

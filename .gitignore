@@ -1,0 +1,21 @@
+# build outputs
+build/
+*.obj
+*.o
+*.exe
+*.dll
+*.so
+*.dylib
+*.lib
+*.exp
+*.pdb
+*.ilk
+*.elf
+*.hex
+*.map
+*.lss
+*.eep
+__pycache__/
+*.pyc
+.pio/
+.vscode/
